@@ -1,4 +1,4 @@
-package tree;
+package tree.collectors;
 
 import common.Collector;
 import common.node.DoubleLinkNode;

@@ -1,39 +1,65 @@
 package tree.bst.redblack;
 
 import common.Injector;
-import common.node.DoubleLinkNode;
-import common.node.Node;
+import common.Mutator;
+import tree.rotations.*;
 
-public class RedBlackTreeInjector<T extends Comparable<? super T>> implements Injector<T> {
-    public Node<T> inject(Node<T> node, T injection) {
-        DoubleLinkNode<T> tree = (DoubleLinkNode<T>) node;
-        insert(tree, injection);
-        return tree;
+public class RedBlackTreeInjector<T extends Comparable<? super T>> implements Injector<T, RedBlackTree<T>> {
+    private TriangularRotation<T, RedBlackTree<T>> leftTriangularRotation = new LeftTriangularRotation<>();
+    private TriangularRotation<T, RedBlackTree<T>> rightTriangularRotation = new RightTriangularRotation<>();
+    private LinearRotation<T, RedBlackTree<T>> leftLinearRotation = new LeftLinearRotation<>();
+    private LinearRotation<T, RedBlackTree<T>> rightLinearRotation = new RightLinearRotation<>();
+    private Mutator<T, RedBlackTree<T>> colourFixer = new ColourFixer<>();
+
+    public RedBlackTree<T> inject(RedBlackTree<T> node, T injection) {
+        return insert(node, injection);
     }
 
-    private void insert(DoubleLinkNode<T> tree, T data) {
-        if (data.compareTo(tree.getData()) < 0)
-            insertInLeftSubtree(tree, data);
-        else
-            insertInRightSubtree(tree, data);
+    private RedBlackTree<T> insert(RedBlackTree<T> root, T data) {
+        return data.compareTo(root.getData()) < 0
+                ? updateLeftSubtree(root, data)
+                : updateRightSubtree(root, data);
     }
 
-    private void insertInRightSubtree(DoubleLinkNode<T> tree, T data) {
-        if (tree.getRight() != null)
-            insert(tree.getRight(), data);
-        else
-            tree.setRight(createNode(data));
-
+    private RedBlackTree<T> updateRightSubtree(RedBlackTree<T> root, T data) {
+        root.setBalanceFactor(root.getBalanceFactor() + 1);
+        if (root.getRight() != null) {
+            root.setRight(insert(root.getRight(), data));
+            return root.getBalanceFactor() == 2
+                    ? colourFixer.mutate(performRightSubtreeRotations(root))
+                    : root;
+        } else {
+            root.setRight(createNode(data));
+            return root;
+        }
     }
 
-    private DoubleLinkNode<T> createNode(T data) {
-        return new DoubleLinkNode<T>(data);
+    private RedBlackTree<T> performRightSubtreeRotations(RedBlackTree<T> root) {
+        return root.getRight().getBalanceFactor() == 1
+                ? rightLinearRotation.execute(root)
+                : rightTriangularRotation.execute(root);
     }
 
-    private void insertInLeftSubtree(DoubleLinkNode<T> tree, T data) {
-        if (tree.getLeft() != null)
-            insert(tree.getLeft(), data);
-        else
-            tree.setLeft(createNode(data));
+    private RedBlackTree<T> createNode(T data) {
+        return new RedBlack Tree<>(data);
+    }
+
+    private RedBlackTree<T> updateLeftSubtree(RedBlackTree<T> root, T data) {
+        root.setBalanceFactor(root.getBalanceFactor() - 1);
+        if (root.getLeft() != null) {
+            root.setLeft(insert(root.getLeft(), data));
+            return root.getBalanceFactor() == -2
+                    ? colourFixer.mutate(performLeftSubtreeRotations(root))
+                    : root;
+        } else {
+            root.setLeft(createNode(data));
+            return root;
+        }
+    }
+
+    private RedBlackTree<T> performLeftSubtreeRotations(RedBlackTree<T> root) {
+        return root.getLeft().getBalanceFactor() == -1
+                ? leftLinearRotation.execute(root)
+                : leftTriangularRotation.execute(root);
     }
 }

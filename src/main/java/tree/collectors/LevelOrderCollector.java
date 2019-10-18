@@ -1,4 +1,4 @@
-package tree.bst;
+package tree.collectors;
 
 import common.Mapper;
 import common.node.DoubleLinkNode;
@@ -7,7 +7,7 @@ import common.node.Node;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class LevelOrderMapper<T> implements Mapper<Integer, T> {
+public class LevelOrderCollector<T> implements Mapper<Integer, T> {
     public Map<Integer, Collection<T>> map(Node<T> root) {
         Map<Integer, Collection<DoubleLinkNode<T>>> levelOrderMap = initMap((DoubleLinkNode<T>) root);
         map(levelOrderMap, 0);

@@ -9,19 +9,19 @@ public class DoubleLinkNode<T> extends Node<T> {
         this.left = this.right = null;
     }
 
-    public DoubleLinkNode<T> getLeft() {
-        return left;
+    public <D extends DoubleLinkNode<T>> D getLeft() {
+        return (D) left;
     }
 
-    public void setLeft(DoubleLinkNode<T> left) {
+    public <D extends DoubleLinkNode<T>> void setLeft(D left) {
         this.left = left;
     }
 
-    public DoubleLinkNode<T> getRight() {
-        return right;
+    public <D extends DoubleLinkNode<T>> D getRight() {
+        return (D) right;
     }
 
-    public void setRight(DoubleLinkNode<T> right) {
+    public <D extends DoubleLinkNode<T>> void setRight(D right) {
         this.right = right;
     }
 }

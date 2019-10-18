@@ -3,13 +3,13 @@ package tree.bst.avl;
 import tree.bst.BinarySearchTree;
 
 public class AvlTree<T extends Comparable<? super T>> extends BinarySearchTree<T> {
-    private int balanceFactor;
+    private BalanceFactor balanceFactor;
 
     private AvlTreeInjector<T> injector = new AvlTreeInjector<T>();
 
     public AvlTree(T data) {
         super(data);
-        this.balanceFactor = 0;
+        this.balanceFactor = new BalanceFactor();
     }
 
     /*
@@ -21,11 +21,11 @@ public class AvlTree<T extends Comparable<? super T>> extends BinarySearchTree<T
         return (AvlTree<T>) injector.inject(this, data);
     }
 
-    public int getBalanceFactor() {
+    public BalanceFactor getBalanceFactor() {
         return balanceFactor;
     }
 
-    public void setBalanceFactor(int balanceFactor) {
+    public void setBalanceFactor(BalanceFactor balanceFactor) {
         this.balanceFactor = balanceFactor;
     }
 

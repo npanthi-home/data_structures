@@ -4,9 +4,10 @@ import common.Collector;
 import common.Injector;
 import common.Mapper;
 import common.node.DoubleLinkNode;
-import tree.InOrderCollector;
-import tree.PostOrderCollector;
-import tree.PreOrderCollector;
+import tree.collectors.InOrderCollector;
+import tree.collectors.LevelOrderCollector;
+import tree.collectors.PostOrderCollector;
+import tree.collectors.PreOrderCollector;
 
 import java.util.Collection;
 import java.util.List;
@@ -17,7 +18,7 @@ public class BinarySearchTree<T extends Comparable<? super T>> extends DoubleLin
     private Collector<T> inOrderCollector = new InOrderCollector<>();
     private Collector<T> preOrderCollector = new PreOrderCollector<>();
     private Collector<T> postOrderCollector = new PostOrderCollector<>();
-    private Mapper<Integer, T> levelOrderMapper = new LevelOrderMapper<>();
+    private Mapper<Integer, T> levelOrderMapper = new LevelOrderCollector<>();
 
     public BinarySearchTree(T data) {
         super(data);
