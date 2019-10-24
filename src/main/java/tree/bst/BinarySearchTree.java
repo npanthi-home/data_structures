@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 public class BinarySearchTree<T extends Comparable<? super T>> extends DoubleLinkNode<T> {
-    private Injector<T> injector = new BinarySearchTreeInjector<>();
+    private Injector<T, BinarySearchTree<T>> injector = new BinarySearchTreeInjector<>();
     private Collector<T> inOrderCollector = new InOrderCollector<>();
     private Collector<T> preOrderCollector = new PreOrderCollector<>();
     private Collector<T> postOrderCollector = new PostOrderCollector<>();
@@ -25,7 +25,7 @@ public class BinarySearchTree<T extends Comparable<? super T>> extends DoubleLin
     }
 
     public BinarySearchTree<T> insert(T data) {
-        return (BinarySearchTree<T>) injector.inject(this, data);
+        return injector.inject(this, data);
     }
 
     public List fetchInOrder() {
